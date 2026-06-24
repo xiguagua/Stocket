@@ -1,0 +1,3 @@
+# SEC EDGAR as the sole MVP data source
+
+The MVP ingests only SEC EDGAR filings (8-K, 10-K, 10-Q) — no financial news RSS, no analyst ratings, no earnings-call transcripts. News and transcripts were considered but rejected for the MVP because they carry TOS/scraping risk that complicates App Store review and IAP monetization, and because the product's differentiated value is translating legalistic filings into plain language — a job news aggregators already do poorly. The trade-off is coverage speed: events appear up to 24h after media reports. For long-term investors this is acceptable; for traders it would not be.
