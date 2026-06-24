@@ -1,6 +1,6 @@
 # Stocket
 
-A macOS/iOS app that turns SEC EDGAR filings into plain-language analysis for long-term, retail US-equity investors. A Python cron worker on a VPS pulls EDGAR daily, runs a two-stage LLM pipeline, stores shared summaries in Cloudflare R2, and pushes a daily digest via APNs. The app reads shared data via a Cloudflare Worker and stores private data (watchlist, read state) in CloudKit Private DB, mirrored to a worker SQLite read-replica for server-side processing.
+An iOS app that turns SEC EDGAR filings into plain-language analysis for long-term, retail US-equity investors. A Python cron worker on a VPS pulls EDGAR daily, runs a two-stage LLM pipeline, stores shared summaries in Cloudflare R2, and pushes a daily digest via APNs. The app reads shared data via a Cloudflare Worker and stores private data (watchlist, read state) in CloudKit Private DB, mirrored to a worker SQLite read-replica for server-side processing.
 
 ## Language
 
@@ -65,7 +65,7 @@ The card field that names a misconception a retail investor is likely to hold ab
 _Avoid_: Warning, caveat, risk note
 
 **Two-stage Pipeline**:
-The worker's LLM processing model: a cheap first stage classifies every 8-K (Importance + Item identification) and summarizes low-value items in 10-K/10-Q; an expensive second stage produces the full structured card only for Importance ≥4 events and high-value 10-K/10-Q items.
+The worker's LLM processing model: a cheap first stage classifies every 8-K (Importance + Item identification) and summarizes mid-value items in 10-K/10-Q; an expensive second stage produces the full structured card only for Importance ≥4 events and high-value 10-K/10-Q items.
 _Avoid_: Two-pass, cascade
 
 **Golden Set**:
@@ -87,7 +87,7 @@ _Avoid_: Test set, benchmark
 **Dev**: "Yeah, it re-pulled yesterday's daily index and found the Accession Number. But it's an Importance 2, so it only ran the first stage."
 **Domain**: "Right, that one won't have Impact Dimensions — just the one-line summary. It'll show in the Events section without the Long-term View."
 **Dev**: "The user has AAPL as a Position. Should the digest payload mention it specifically?"
-**Domain**: "No — the payload is global per ADR-0004, just 'N new events today'. The app filters the R2 data by their Watchlist when Today opens. Personalization happens client-side."
+**Domain**: "No — the payload is global, just 'N new events today'. The app filters the R2 data by their Watchlist when Today opens. Personalization happens client-side."
 
 **Dev**: "This 10-K's Item 1A added three new risk factors this year. How should the Periodic Report card show the diff?"
 **Domain**: "It's the headline of that 10-K's card in the Periodic Reports section — new risks listed, removed risks listed, then the Long-term View on what the shift signals. The Common Misreading field should call out if retail investors might overreact to a boilerplate-sounding addition."
