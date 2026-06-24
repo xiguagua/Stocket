@@ -33,8 +33,8 @@ The app is currently Xcode-template scaffold (`ContentView.swift`, `Item.swift`)
 # Build (simulator)
 xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 16' build
 
-# Run unit + UI tests
-xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 16' test
+# Run unit tests
+xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 16' test -only-testing:StocketTests
 
 # Single test (Swift Testing)
 xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 16' test -only-testing:StocketTests/StocketTests/example
@@ -63,7 +63,6 @@ python worker/smoke.py
 ## Tests
 
 - **iOS unit tests** (`StocketTests/`) use Swift Testing: `import Testing`, `struct`-based suites, `@Test func`, `#expect`. Do not add XCTest-style classes here.
-- **iOS UI tests** (`StocketUITests/`) use `XCTestCase`. These need a runnable app target and a simulator.
 - **Worker tests** (`worker/tests/`) use `pytest`. Pure-function unit tests only (XBRL parser, schema validator, gap detection, payload constructor, accession dedup). See ADR-0002 and Q33-B.
 - **Smoke test** (`worker/smoke.py`) — end-to-end pipeline on a known historical filing. Run before deploying worker changes.
 
