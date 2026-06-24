@@ -1,32 +1,49 @@
-//
-//  StocketApp.swift
-//  Stocket
-//
-//  Created by 黄城 on 2025/9/14.
-//
-
 import SwiftUI
 import SwiftData
 
+// MARK: - Reference ModelContext Environment
+
+private struct ReferenceModelContextKey: EnvironmentKey {
+    static let defaultValue: ModelContext? = nil
+}
+
+extension EnvironmentValues {
+    var referenceModelContext: ModelContext? {
+        get { self[ReferenceModelContextKey.self] }
+        set { self[ReferenceModelContextKey.self] = newValue }
+    }
+}
+
+// MARK: - App
+
 @main
 struct StocketApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+    let userContainer: ModelContainer
+    let referenceContainer: ModelContainer
 
+    init() {
+        let userSchema = Schema([UserTicker.self])
+        let userConfig = ModelConfiguration(schema: userSchema, isStoredInMemoryOnly: false)
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            userContainer = try ModelContainer(for: userSchema, configurations: [userConfig])
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            fatalError("Could not create UserContainer: \(error)")
         }
-    }()
+
+        let refSchema = Schema([EventSummary.self])
+        let refConfig = ModelConfiguration(schema: refSchema, isStoredInMemoryOnly: false)
+        do {
+            referenceContainer = try ModelContainer(for: refSchema, configurations: [refConfig])
+        } catch {
+            fatalError("Could not create ReferenceContainer: \(error)")
+        }
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.referenceModelContext, referenceContainer.mainContext)
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(userContainer)
     }
 }

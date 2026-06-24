@@ -31,13 +31,13 @@ The app is currently Xcode-template scaffold (`ContentView.swift`, `Item.swift`)
 
 ```bash
 # Build (simulator)
-xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 16' build
+xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 17' build
 
 # Run unit tests
-xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 16' test -only-testing:StocketTests
+xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:StocketTests
 
 # Single test (Swift Testing)
-xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 16' test -only-testing:StocketTests/StocketTests/example
+xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:StocketTests/StocketTests/example
 ```
 
 Pick a simulator name that exists on the machine (`xcrun simctl list devices available`) before running.

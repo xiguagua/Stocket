@@ -1,0 +1,12 @@
+.DS_Store
+
+# Xcode local state
+DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# Python worker local state
+worker/.venv/
+worker/data/
+worker/**/__pycache__/
+worker/**/*.py[cod]

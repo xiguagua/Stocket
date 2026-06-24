@@ -23,12 +23,28 @@ final class StocketUITests: XCTestCase {
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func testAddTickerAndShowTodayEvent() throws {
         let app = XCUIApplication()
+        app.launchEnvironment["WORKER_HOST"] = "127.0.0.1"
+        app.launchEnvironment["WORKER_PORT"] = "8787"
         app.launch()
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        app.tabBars.buttons["Portfolio"].tap()
+        app.buttons["portfolio.addTicker"].tap()
+
+        let searchField = app.searchFields["Search ticker or company name"]
+        XCTAssertTrue(searchField.waitForExistence(timeout: 5))
+        searchField.tap()
+        searchField.typeText("AAPL")
+
+        let aaplResult = app.buttons["AAPL"]
+        XCTAssertTrue(aaplResult.waitForExistence(timeout: 5))
+        aaplResult.tap()
+
+        XCTAssertTrue(app.staticTexts["AAPL"].waitForExistence(timeout: 5))
+
+        app.tabBars.buttons["Today"].tap()
+        XCTAssertTrue(app.staticTexts["Company filed a current report."].waitForExistence(timeout: 10))
     }
 
     @MainActor
