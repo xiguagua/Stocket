@@ -1,6 +1,6 @@
 # Stocket
 
-An iOS app that turns SEC EDGAR filings into plain-language analysis for long-term, retail US-equity investors. A Python cron worker on a VPS pulls EDGAR daily, runs a two-stage LLM pipeline, stores shared summaries in Cloudflare R2, and pushes a daily digest via APNs. The app reads shared data via a Cloudflare Worker and stores private data (watchlist, read state) in CloudKit Private DB, mirrored to a worker SQLite read-replica for server-side processing.
+An iOS app that turns SEC EDGAR filings into plain-language analysis for long-term, retail US-equity investors. A Python cron worker on a VPS pulls EDGAR daily, runs a two-stage LLM pipeline, stores shared summaries in Cloudflare R2, and pushes a daily digest via APNs. The app reads shared data via the VPS FastAPI read endpoint and stores private data (watchlist, read state) in CloudKit Private DB, mirrored to a worker SQLite read-replica for server-side processing.
 
 ## Language
 

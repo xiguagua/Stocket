@@ -4,15 +4,14 @@ Repo-specific guidance for OpenCode sessions working on Stocket.
 
 ## Repo scope
 
-This is a monorepo containing all three components of the Stocket system:
+This is a monorepo containing two components of the Stocket system:
 
 - **`Stocket/`** (root) — iOS app (SwiftUI + SwiftData, Xcode project at root)
-- **`worker/`** — Python VPS cron + FastAPI server (EDGAR ingestion, two-stage LLM pipeline, APNs push, SQLite read-replica)
-- **`edge/`** — Cloudflare Worker (stateless R2 read endpoint for the app)
+- **`worker/`** — Python VPS cron + FastAPI server (EDGAR ingestion, two-stage LLM pipeline, APNs push, SQLite read-replica, R2 read endpoint for the app)
 
-`CONTEXT.md` defines the domain glossary shared across all components. ADRs in `docs/adr/` cover cross-cutting decisions. Commit scope tags (`app`, `worker`, `edge`) indicate which component a change touches.
+`CONTEXT.md` defines the domain glossary shared across all components. ADRs in `docs/adr/` cover cross-cutting decisions. Commit scope tags (`app`, `worker`) indicate which component a change touches.
 
-The app is currently Xcode-template scaffold (`ContentView.swift`, `Item.swift`). The `worker/` and `edge/` directories do not exist yet — create them when implementing the first server-side slice.
+The app is currently Xcode-template scaffold (`ContentView.swift`, `Item.swift`). The `worker/` directory does not exist yet — create it when implementing the first server-side slice.
 
 ## Read first
 
@@ -61,26 +60,15 @@ pytest worker/tests/
 python worker/smoke.py
 ```
 
-### Edge (`edge/`, Cloudflare Worker)
-
-- TypeScript. Stateless read endpoint for R2. Deployed via `wrangler`.
-- Bindings: R2 bucket (`SUMMARIES`).
-
-```bash
-# Deploy
-cd edge/ && npx wrangler deploy
-```
-
 ## Tests
 
 - **iOS unit tests** (`StocketTests/`) use Swift Testing: `import Testing`, `struct`-based suites, `@Test func`, `#expect`. Do not add XCTest-style classes here.
 - **iOS UI tests** (`StocketUITests/`) use `XCTestCase`. These need a runnable app target and a simulator.
 - **Worker tests** (`worker/tests/`) use `pytest`. Pure-function unit tests only (XBRL parser, schema validator, gap detection, payload constructor, accession dedup). See ADR-0002 and Q33-B.
 - **Smoke test** (`worker/smoke.py`) — end-to-end pipeline on a known historical filing. Run before deploying worker changes.
-- **Edge** — no tests; the Worker is a thin R2 read wrapper. Verify manually or via the smoke test.
 
 ## Git
 
 - Remote: `origin` → `github.com:xiguagua/Stocket.git` (public). Default branch is `beta`; `main` also exists. Confirm branch/PR expectations with the user before pushing or opening PRs.
 - Do not commit unless explicitly asked.
-- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): subject`. Scope indicates which component: `app`, `worker`, `edge`, or `docs`/`repo` for cross-cutting. E.g. `feat(worker): add EDGAR daily index cron`, `feat(app): add ticker search`, `fix(edge): handle R2 list pagination`.
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): subject`. Scope indicates which component: `app`, `worker`, or `docs`/`repo` for cross-cutting. E.g. `feat(worker): add EDGAR daily index cron`, `feat(app): add ticker search`, `fix(worker): handle R2 list pagination`.
