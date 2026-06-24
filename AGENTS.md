@@ -71,4 +71,5 @@ python worker/smoke.py
 
 - Remote: `origin` → `github.com:xiguagua/Stocket.git` (public). Default branch is `beta`; `main` also exists. Confirm branch/PR expectations with the user before pushing or opening PRs.
 - Do not commit unless explicitly asked.
+- Do not push unless explicitly asked — even if a remote is configured and a commit was requested, wait for an explicit push instruction.
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): subject`. Scope indicates which component: `app`, `worker`, or `docs`/`repo` for cross-cutting. E.g. `feat(worker): add EDGAR daily index cron`, `feat(app): add ticker search`, `fix(worker): handle R2 list pagination`.
