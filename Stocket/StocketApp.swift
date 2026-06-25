@@ -9,9 +9,18 @@ struct StocketApp: App {
 
   init() {
     let userSchema = Schema([UserTicker.self])
-    let userConfig = ModelConfiguration(schema: userSchema, isStoredInMemoryOnly: false)
     let refSchema = Schema([EventSummary.self])
-    let refConfig = ModelConfiguration(schema: refSchema, isStoredInMemoryOnly: false)
+    let storeDirectory = URL.applicationSupportDirectory
+    let userConfig = ModelConfiguration(
+      "UserPrivate",
+      schema: userSchema,
+      url: storeDirectory.appending(path: "UserPrivate.store")
+    )
+    let refConfig = ModelConfiguration(
+      "Reference",
+      schema: refSchema,
+      url: storeDirectory.appending(path: "Reference.store")
+    )
 
     let appSchema = Schema([UserTicker.self, EventSummary.self])
     do {

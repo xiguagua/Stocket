@@ -75,6 +75,13 @@ struct PortfolioView: View {
         )
         modelContext.insert(userTicker)
 
+        do {
+            try modelContext.save()
+        } catch {
+            postingError = error.localizedDescription
+            return
+        }
+
         Task {
             do {
                 try await WorkerClient.shared.postWatchlist(
