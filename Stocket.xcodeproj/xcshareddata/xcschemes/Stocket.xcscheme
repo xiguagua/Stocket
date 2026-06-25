@@ -41,17 +41,6 @@
                ReferencedContainer = "container:Stocket.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4BF25C9E2E76F523000A62F9"
-               BuildableName = "StocketUITests.xctest"
-               BlueprintName = "StocketUITests"
-               ReferencedContainer = "container:Stocket.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
