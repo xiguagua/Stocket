@@ -4,15 +4,15 @@ Repo-specific guidance for OpenCode sessions working on Stocket.
 
 ## Repo scope
 
-This is a monorepo containing two components of the Stocket system:
+This is a monorepo containing three components of the Stocket system:
 
-- **`Stocket/`** (root) — iOS app (SwiftUI + SwiftData, Xcode project at root)
+- **`Stocket/`** — iOS app source (SwiftUI + SwiftData). The Xcode project is `Stocket.xcodeproj` at the repository root.
 - **`STLibrary/`** — Swift Package for pure Swift logic and non-UI Swift Testing tests
 - **`worker/`** — Python VPS cron + FastAPI server (EDGAR ingestion, two-stage LLM pipeline, APNs push, SQLite read-replica, R2 read endpoint for the app)
 
 `CONTEXT.md` defines the domain glossary shared across all components. ADRs in `docs/adr/` cover cross-cutting decisions. Commit scope tags (`app`, `worker`) indicate which component a change touches.
 
-The `worker/` directory does not exist yet — create it when implementing the first server-side slice.
+The `worker/` directory exists and contains the initial server-side slice.
 
 ## Read first
 
@@ -41,15 +41,16 @@ The `worker/` directory does not exist yet — create it when implementing the f
 - Shared scheme `Stocket` is checked in. With `xcodebuild` pass `-scheme Stocket`.
 - Bundle ID `com.flhcc.Stocket`, team `RW8NZD94C3`, app group `group.com.flhcc.Stocket`. Entitlements (`Stocket.entitlements`) enable CloudKit and APNs (development); keep these in sync if you touch capabilities.
 - No SPM dependencies yet. If adding one, use Xcode's package integration (the `packageProductDependencies` section is currently empty).
-- Prefer XcodeBuildMCP for agent-driven app builds, runs, tests, simulator logs, screenshots, and UI inspection. Keep raw `xcodebuild` for CI, fallback, and exact command-line reproduction. Unless the user explicitly asks to run the app, inspect UI, capture screenshots, or collect runtime logs, use `build_sim` rather than `build_run_sim` so the Simulator is not launched unnecessarily.
-- XcodeBuildMCP defaults are persisted in `.xcodebuildmcp/config.yaml` for the app: project `Stocket.xcodeproj`, scheme `Stocket`, configuration `Debug`, simulator `iPhone 17` (`9250ED78-3FC0-4EFE-97BB-5070F3A28AFD`). For MCP workflows, first call `session_show_defaults`; if these defaults are present, use `build_sim`, `build_run_sim`, or `test_sim` without repeating project/scheme/simulator arguments.
+- Prefer the installed XcodeBuildMCP CLI skill for agent-driven app builds, runs, tests, simulator logs, screenshots, and UI inspection. Do not start or rely on the MCP server workflow for normal repo work. Keep raw `xcodebuild` for CI, fallback, and exact command-line reproduction.
+- XcodeBuildMCP defaults are persisted in `.xcodebuildmcp/config.yaml` for the app: project `Stocket.xcodeproj`, scheme `Stocket`, configuration `Debug`, simulator `iPhone 17` (`9250ED78-3FC0-4EFE-97BB-5070F3A28AFD`).
+
+Fallback raw build command for CI or exact command-line reproduction:
 
 ```bash
-# Build (simulator)
 xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 17' build
 ```
 
-Pick a simulator name that exists on the machine (`xcrun simctl list devices available`) before running.
+When using raw `xcodebuild`, pick a simulator name that exists on the machine (`xcrun simctl list devices available`) before running.
 
 ### Swift library (`STLibrary/`)
 
