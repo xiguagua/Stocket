@@ -1,0 +1,8 @@
+schemaVersion: 1
+sessionDefaults:
+  projectPath: /Users/huangcheng/Developer/Stocket/Stocket.xcodeproj
+  scheme: Stocket
+  configuration: Debug
+  simulatorName: iPhone 17
+  simulatorId: 9250ED78-3FC0-4EFE-97BB-5070F3A28AFD
+  simulatorPlatform: iOS Simulator

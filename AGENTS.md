@@ -41,6 +41,8 @@ The `worker/` directory does not exist yet — create it when implementing the f
 - Shared scheme `Stocket` is checked in. With `xcodebuild` pass `-scheme Stocket`.
 - Bundle ID `com.flhcc.Stocket`, team `RW8NZD94C3`, app group `group.com.flhcc.Stocket`. Entitlements (`Stocket.entitlements`) enable CloudKit and APNs (development); keep these in sync if you touch capabilities.
 - No SPM dependencies yet. If adding one, use Xcode's package integration (the `packageProductDependencies` section is currently empty).
+- Prefer XcodeBuildMCP for agent-driven app builds, runs, tests, simulator logs, screenshots, and UI inspection. Keep raw `xcodebuild` for CI, fallback, and exact command-line reproduction. Unless the user explicitly asks to run the app, inspect UI, capture screenshots, or collect runtime logs, use `build_sim` rather than `build_run_sim` so the Simulator is not launched unnecessarily.
+- XcodeBuildMCP defaults are persisted in `.xcodebuildmcp/config.yaml` for the app: project `Stocket.xcodeproj`, scheme `Stocket`, configuration `Debug`, simulator `iPhone 17` (`9250ED78-3FC0-4EFE-97BB-5070F3A28AFD`). For MCP workflows, first call `session_show_defaults`; if these defaults are present, use `build_sim`, `build_run_sim`, or `test_sim` without repeating project/scheme/simulator arguments.
 
 ```bash
 # Build (simulator)
