@@ -18,7 +18,11 @@ The `worker/` directory does not exist yet — create it when implementing the f
 
 - `CONTEXT.md` — domain glossary. Canonical terms (Ticker, CIK, Accession Number, Event vs Filing, Position vs Watching, Impact Dimension, Digest) are normative; use them verbatim and do not substitute synonyms. Misusing them breaks alignment with the worker and ADRs.
 - `docs/adr/` — architecture decisions. Check here before changing data flow or storage. Notably:
-  - ADR-0006: the app uses **two SwiftData containers** — `UserContainer` (CloudKit Private DB synced, user-private models) and `ReferenceContainer` (local-only, read-only mirror of shared data). `@Environment(\.modelContext)` must be targeted to the correct container; do not assume a single container.
+  - ADR-0006: the app separates user-private models from reference data with distinct SwiftData schemas/configurations. These can be hosted by one `ModelContainer`; do not split containers unless there is a concrete need.
+
+## Code style
+
+- Swift files use 2 spaces for indentation.
 
 ## Build & toolchain
 

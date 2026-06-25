@@ -1,49 +1,30 @@
 import SwiftUI
 import SwiftData
 
-// MARK: - Reference ModelContext Environment
-
-private struct ReferenceModelContextKey: EnvironmentKey {
-    static let defaultValue: ModelContext? = nil
-}
-
-extension EnvironmentValues {
-    var referenceModelContext: ModelContext? {
-        get { self[ReferenceModelContextKey.self] }
-        set { self[ReferenceModelContextKey.self] = newValue }
-    }
-}
-
 // MARK: - App
 
 @main
 struct StocketApp: App {
-    let userContainer: ModelContainer
-    let referenceContainer: ModelContainer
+  let appContainer: ModelContainer
 
-    init() {
-        let userSchema = Schema([UserTicker.self])
-        let userConfig = ModelConfiguration(schema: userSchema, isStoredInMemoryOnly: false)
-        do {
-            userContainer = try ModelContainer(for: userSchema, configurations: [userConfig])
-        } catch {
-            fatalError("Could not create UserContainer: \(error)")
-        }
+  init() {
+    let userSchema = Schema([UserTicker.self])
+    let userConfig = ModelConfiguration(schema: userSchema, isStoredInMemoryOnly: false)
+    let refSchema = Schema([EventSummary.self])
+    let refConfig = ModelConfiguration(schema: refSchema, isStoredInMemoryOnly: false)
 
-        let refSchema = Schema([EventSummary.self])
-        let refConfig = ModelConfiguration(schema: refSchema, isStoredInMemoryOnly: false)
-        do {
-            referenceContainer = try ModelContainer(for: refSchema, configurations: [refConfig])
-        } catch {
-            fatalError("Could not create ReferenceContainer: \(error)")
-        }
+    let appSchema = Schema([UserTicker.self, EventSummary.self])
+    do {
+      appContainer = try ModelContainer(for: appSchema, configurations: [userConfig, refConfig])
+    } catch {
+      fatalError("Could not create ModelContainer: \(error)")
     }
+  }
 
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environment(\.referenceModelContext, referenceContainer.mainContext)
-        }
-        .modelContainer(userContainer)
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
     }
+    .modelContainer(appContainer)
+  }
 }
