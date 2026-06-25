@@ -17,6 +17,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4BF25C832E76F522000A62F9"
                BuildableName = "Stocket.app"
+               BlueprintName = "Stocket"
                ReferencedContainer = "container:Stocket.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -36,6 +37,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4BF25C942E76F523000A62F9"
                BuildableName = "StocketTests.xctest"
+               BlueprintName = "StocketTests"
                ReferencedContainer = "container:Stocket.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -46,6 +48,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4BF25C9E2E76F523000A62F9"
                BuildableName = "StocketUITests.xctest"
+               BlueprintName = "StocketUITests"
                ReferencedContainer = "container:Stocket.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -68,6 +71,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4BF25C832E76F522000A62F9"
             BuildableName = "Stocket.app"
+            BlueprintName = "Stocket"
             ReferencedContainer = "container:Stocket.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -84,6 +88,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4BF25C832E76F522000A62F9"
             BuildableName = "Stocket.app"
+            BlueprintName = "Stocket"
             ReferencedContainer = "container:Stocket.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
