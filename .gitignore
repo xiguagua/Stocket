@@ -8,6 +8,8 @@ xcuserdata/
 # SwiftPM local state
 .build/
 **/.build/
+.swiftpm/
+**/.swiftpm/
 
 # Python worker local state
 worker/.venv/

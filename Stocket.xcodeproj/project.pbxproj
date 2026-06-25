@@ -21,6 +21,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		4B0C0A012EFB000000000001 /* STLibrary */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = STLibrary;
+			sourceTree = "<group>";
+		};
 		4BF25C862E76F522000A62F9 /* Stocket */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -46,6 +51,7 @@
 			isa = PBXGroup;
 			children = (
 				4BF25C862E76F522000A62F9 /* Stocket */,
+				4B0C0A012EFB000000000001 /* STLibrary */,
 				4BF25C852E76F522000A62F9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -107,6 +113,8 @@
 			);
 			mainGroup = 4BF25C7B2E76F522000A62F9;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4BF25C852E76F522000A62F9 /* Products */;
 			projectDirPath = "";
