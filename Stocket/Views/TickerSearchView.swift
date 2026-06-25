@@ -11,19 +11,19 @@ struct TickerSearchView: View {
             List(results) { entry in
                 Button { onSelect(entry) } label: {
                     VStack(alignment: .leading) {
-                        Text(entry.ticker)
+                        Text(verbatim: entry.ticker)
                             .font(.headline)
-                        Text(entry.companyName)
+                        Text(verbatim: entry.companyName)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
             }
-            .searchable(text: $query, prompt: "Search ticker or company name")
+            .searchable(text: $query, prompt: Text("ticker.search.prompt"))
             .onChange(of: query) { _, newValue in
                 results = TickerLookup.search(newValue, in: allEntries)
             }
-            .navigationTitle("Add Ticker")
+            .navigationTitle("ticker.search.title")
             .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear {

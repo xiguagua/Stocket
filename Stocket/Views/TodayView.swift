@@ -26,9 +26,9 @@ struct TodayView: View {
       Group {
         if events.isEmpty {
           ContentUnavailableView(
-            "No new events today",
+            "today.empty.title",
             systemImage: "newspaper",
-            description: Text(lastSynced.map { "Last updated \(dateFormatter.string(from: $0))" } ?? "Events for your watchlist will appear here")
+            description: emptyDescription
           )
         } else {
           List(events) { event in
@@ -36,7 +36,7 @@ struct TodayView: View {
           }
         }
       }
-      .navigationTitle("Today")
+      .navigationTitle("today.title")
       .task(id: syncKey) { await loadAndSync() }
     }
   }
@@ -62,6 +62,15 @@ struct TodayView: View {
     let all = (try? modelContext.fetch(descriptor)) ?? []
     events = all.filter { tickerNames.contains($0.ticker) }
   }
+
+  private var emptyDescription: Text {
+    guard let lastSynced else {
+      return Text("today.empty.description")
+    }
+
+    let template = String(localized: "today.empty.lastUpdated")
+    return Text(verbatim: String(format: template, dateFormatter.string(from: lastSynced)))
+  }
 }
 
 private struct EventRow: View {
@@ -70,18 +79,18 @@ private struct EventRow: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
       HStack {
-        Text(event.ticker)
+        Text(verbatim: event.ticker)
           .font(.caption)
           .fontWeight(.semibold)
           .foregroundStyle(.secondary)
         Spacer()
-        Text(event.filingType)
+        Text(verbatim: event.filingType)
           .font(.caption2)
           .padding(.horizontal, 6)
           .padding(.vertical, 2)
           .background(Color.blue.opacity(0.15), in: Capsule())
       }
-      Text(event.oneLineSummary)
+      Text(verbatim: event.oneLineSummary)
         .font(.body)
     }
     .padding(.vertical, 4)

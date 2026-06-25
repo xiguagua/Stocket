@@ -24,6 +24,14 @@ The `worker/` directory does not exist yet — create it when implementing the f
 
 - Swift files use 2 spaces for indentation.
 
+### Localization
+
+- Use `Localizable.xcstrings` for app user-facing strings. The source language is English; add `zh-Hans` translations for Simplified Chinese UI copy.
+- Prefer explicit, stable localization keys instead of English prose as keys. Format keys as dot-separated semantic paths, with lowerCamelCase allowed inside each segment, e.g. `portfolio.empty.title`, `ticker.search.prompt`, `today.empty.lastUpdated`.
+- Keep canonical domain terms from `CONTEXT.md` aligned in localized copy. Do not casually substitute terms such as Ticker, CIK, Accession Number, Event, Filing, Position, Watching, Watchlist, Impact Dimension, or Digest.
+- Do not localize user/data content such as Ticker symbols, company names, Filing types returned by data, or worker-generated summaries. In SwiftUI, render these with `Text(verbatim:)` when needed to avoid treating them as localization keys.
+- For interpolated UI strings, keep the template in `Localizable.xcstrings` and pass formatted values into the localized template rather than building user-visible English strings inline.
+
 ## Build & toolchain
 
 ### iOS app (`Stocket/`, root)

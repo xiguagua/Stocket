@@ -13,18 +13,18 @@ struct PortfolioView: View {
             Group {
                 if tickers.isEmpty {
                     ContentUnavailableView(
-                        "Your watchlist is empty",
+                        "portfolio.empty.title",
                         systemImage: "chart.line.uptrend.xyaxis",
-                        description: Text("Tap + to add your first ticker")
+                        description: Text("portfolio.empty.description")
                     )
                 } else {
                     List {
-                        Section("Positions") {
+                        Section("portfolio.positions.section") {
                             ForEach(tickers.filter { $0.relation == .position }) { ticker in
                                 tickerRow(ticker)
                             }
                         }
-                        Section("Watching") {
+                        Section("portfolio.watching.section") {
                             ForEach(tickers.filter { $0.relation == .watching }) { ticker in
                                 tickerRow(ticker)
                             }
@@ -32,7 +32,7 @@ struct PortfolioView: View {
                     }
                 }
             }
-            .navigationTitle("Portfolio")
+            .navigationTitle("portfolio.title")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showingSearch = true } label: {
@@ -54,12 +54,12 @@ struct PortfolioView: View {
     private func tickerRow(_ ticker: UserTicker) -> some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(ticker.ticker).font(.headline)
-                Text(ticker.companyName).font(.caption).foregroundStyle(.secondary)
+                Text(verbatim: ticker.ticker).font(.headline)
+                Text(verbatim: ticker.companyName).font(.caption).foregroundStyle(.secondary)
             }
             Spacer()
             if ticker.relation == .position {
-                Text("Position").font(.caption2).padding(.horizontal, 8).padding(.vertical, 2)
+                Text("portfolio.position.badge").font(.caption2).padding(.horizontal, 8).padding(.vertical, 2)
                     .background(Color.green.opacity(0.2), in: Capsule())
             }
         }
