@@ -7,11 +7,12 @@ Repo-specific guidance for OpenCode sessions working on Stocket.
 This is a monorepo containing two components of the Stocket system:
 
 - **`Stocket/`** (root) — iOS app (SwiftUI + SwiftData, Xcode project at root)
+- **`STLibrary/`** — Swift Package for pure Swift logic and non-UI Swift Testing tests
 - **`worker/`** — Python VPS cron + FastAPI server (EDGAR ingestion, two-stage LLM pipeline, APNs push, SQLite read-replica, R2 read endpoint for the app)
 
 `CONTEXT.md` defines the domain glossary shared across all components. ADRs in `docs/adr/` cover cross-cutting decisions. Commit scope tags (`app`, `worker`) indicate which component a change touches.
 
-The app is currently Xcode-template scaffold (`ContentView.swift`, `Item.swift`). The `worker/` directory does not exist yet — create it when implementing the first server-side slice.
+The `worker/` directory does not exist yet — create it when implementing the first server-side slice.
 
 ## Read first
 
@@ -24,23 +25,26 @@ The app is currently Xcode-template scaffold (`ContentView.swift`, `Item.swift`)
 ### iOS app (`Stocket/`, root)
 
 - Xcode project (`Stocket.xcodeproj`), not an SPM package. iOS-only target.
-- Deployment target iOS 27.0, Swift 6. Build for simulator unless asked otherwise.
-- No shared schemes are checked in; Xcode auto-generates the `Stocket` scheme. With `xcodebuild` pass `-scheme Stocket`.
+- Deployment target iOS 26.5, Swift 6. Build for simulator unless asked otherwise.
+- Shared scheme `Stocket` is checked in. With `xcodebuild` pass `-scheme Stocket`.
 - Bundle ID `com.flhcc.Stocket`, team `RW8NZD94C3`, app group `group.com.flhcc.Stocket`. Entitlements (`Stocket.entitlements`) enable CloudKit and APNs (development); keep these in sync if you touch capabilities.
 - No SPM dependencies yet. If adding one, use Xcode's package integration (the `packageProductDependencies` section is currently empty).
 
 ```bash
 # Build (simulator)
 xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 17' build
-
-# Run unit tests
-xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:StocketTests
-
-# Single test (Swift Testing)
-xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 17' test -only-testing:StocketTests/StocketTests/example
 ```
 
 Pick a simulator name that exists on the machine (`xcrun simctl list devices available`) before running.
+
+### Swift library (`STLibrary/`)
+
+- Swift Package for pure Swift logic and non-UI tests.
+- Tests use Swift Testing and run via `swift test` without launching an iOS Simulator.
+
+```bash
+swift test --package-path STLibrary
+```
 
 ### Worker (`worker/`, Python)
 
@@ -62,7 +66,8 @@ python worker/smoke.py
 
 ## Tests
 
-- **iOS unit tests** (`StocketTests/`) use Swift Testing: `import Testing`, `struct`-based suites, `@Test func`, `#expect`. Do not add XCTest-style classes here.
+- **Swift library tests** (`STLibrary/Tests/`) use Swift Testing: `import Testing`, `struct`-based suites, `@Test func`, `#expect`. Do not add XCTest-style classes here.
+- **App UI tests** are intentionally absent. Do not add app-hosted UI/unit test targets unless explicitly requested; prefer moving pure logic into `STLibrary` and testing it with `swift test`.
 - **Worker tests** (`worker/tests/`) use `pytest`. Pure-function unit tests only (XBRL parser, schema validator, gap detection, payload constructor, accession dedup). See ADR-0002 and Q33-B.
 - **Smoke test** (`worker/smoke.py`) — end-to-end pipeline on a known historical filing. Run before deploying worker changes.
 

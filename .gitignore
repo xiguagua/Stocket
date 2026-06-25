@@ -5,6 +5,10 @@ DerivedData/
 *.xcuserstate
 xcuserdata/
 
+# SwiftPM local state
+.build/
+**/.build/
+
 # Python worker local state
 worker/.venv/
 worker/data/

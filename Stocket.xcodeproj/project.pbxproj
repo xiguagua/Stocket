@@ -6,19 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXContainerItemProxy section */
-		4BF25C962E76F523000A62F9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4BF25C7C2E76F522000A62F9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4BF25C832E76F522000A62F9;
-			remoteInfo = Stocket;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		4BF25C842E76F522000A62F9 /* Stocket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stocket.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		4BF25C952E76F523000A62F9 /* StocketTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StocketTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -40,22 +29,10 @@
 			path = Stocket;
 			sourceTree = "<group>";
 		};
-		4BF25C982E76F523000A62F9 /* StocketTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = StocketTests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4BF25C812E76F522000A62F9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4BF25C922E76F523000A62F9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -69,7 +46,6 @@
 			isa = PBXGroup;
 			children = (
 				4BF25C862E76F522000A62F9 /* Stocket */,
-				4BF25C982E76F523000A62F9 /* StocketTests */,
 				4BF25C852E76F522000A62F9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,7 +54,6 @@
 			isa = PBXGroup;
 			children = (
 				4BF25C842E76F522000A62F9 /* Stocket.app */,
-				4BF25C952E76F523000A62F9 /* StocketTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,29 +83,6 @@
 			productReference = 4BF25C842E76F522000A62F9 /* Stocket.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4BF25C942E76F523000A62F9 /* StocketTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4BF25CAD2E76F523000A62F9 /* Build configuration list for PBXNativeTarget "StocketTests" */;
-			buildPhases = (
-				4BF25C912E76F523000A62F9 /* Sources */,
-				4BF25C922E76F523000A62F9 /* Frameworks */,
-				4BF25C932E76F523000A62F9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4BF25C972E76F523000A62F9 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				4BF25C982E76F523000A62F9 /* StocketTests */,
-			);
-			name = StocketTests;
-			packageProductDependencies = (
-			);
-			productName = StocketTests;
-			productReference = 4BF25C952E76F523000A62F9 /* StocketTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -143,10 +95,6 @@
 				TargetAttributes = {
 					4BF25C832E76F522000A62F9 = {
 						CreatedOnToolsVersion = 26.0;
-					};
-					4BF25C942E76F523000A62F9 = {
-						CreatedOnToolsVersion = 26.0;
-						TestTargetID = 4BF25C832E76F522000A62F9;
 					};
 				};
 			};
@@ -165,20 +113,12 @@
 			projectRoot = "";
 			targets = (
 				4BF25C832E76F522000A62F9 /* Stocket */,
-				4BF25C942E76F523000A62F9 /* StocketTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4BF25C822E76F522000A62F9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4BF25C932E76F523000A62F9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -195,22 +135,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4BF25C912E76F523000A62F9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		4BF25C972E76F523000A62F9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4BF25C832E76F522000A62F9 /* Stocket */;
-			targetProxy = 4BF25C962E76F523000A62F9 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		4BF25CA92E76F523000A62F9 /* Debug */ = {
@@ -425,60 +350,6 @@
 			};
 			name = Release;
 		};
-		4BF25CAE2E76F523000A62F9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = RW8NZD94C3;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.flhcc.StocketTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stocket.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Stocket";
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Debug;
-		};
-		4BF25CAF2E76F523000A62F9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = RW8NZD94C3;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.flhcc.StocketTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stocket.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Stocket";
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -496,15 +367,6 @@
 			buildConfigurations = (
 				4BF25CA92E76F523000A62F9 /* Debug */,
 				4BF25CAA2E76F523000A62F9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4BF25CAD2E76F523000A62F9 /* Build configuration list for PBXNativeTarget "StocketTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4BF25CAE2E76F523000A62F9 /* Debug */,
-				4BF25CAF2E76F523000A62F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
