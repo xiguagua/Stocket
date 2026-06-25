@@ -4,15 +4,13 @@ import SwiftData
 struct ContentView: View {
     var body: some View {
         TabView {
-            TodayView()
-                .tabItem {
-                    Label("Today", systemImage: "newspaper")
-                }
+            Tab("Today", systemImage: "newspaper") {
+                TodayView()
+            }
 
-            PortfolioView()
-                .tabItem {
-                    Label("Portfolio", systemImage: "list.bullet")
-                }
+            Tab("Portfolio", systemImage: "list.bullet") {
+                PortfolioView()
+            }
         }
     }
 }
