@@ -46,6 +46,7 @@ struct PortfolioView: View {
                     addTicker(entry)
                     showingSearch = false
                 }
+                .presentationDetents([.medium, .large])
             }
         }
     }
