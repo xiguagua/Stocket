@@ -42,6 +42,7 @@ The `worker/` directory exists and contains the initial server-side slice.
 - Bundle ID `com.flhcc.Stocket`, team `RW8NZD94C3`, app group `group.com.flhcc.Stocket`. Entitlements (`Stocket.entitlements`) enable CloudKit and APNs (development); keep these in sync if you touch capabilities.
 - No SPM dependencies yet. If adding one, use Xcode's package integration (the `packageProductDependencies` section is currently empty).
 - **CRITICAL**: ALWAYS use `xcodebuildmcp` instead of raw `xcodebuild` for local dev. Raw `xcodebuild` is slow and bypasses the daemon cache.
+- **CRITICAL**: Verification only requires `build` to succeed. Avoid `build-and-run` (which installs and launches the app in the simulator) unless explicitly requested by the user, as booting the simulator and launching the app introduces significant unnecessary latency.
 - **Canonical Commands**:
   - Build: `xcodebuildmcp simulator build --style minimal`
   - Run: `xcodebuildmcp simulator build-and-run --style minimal`
