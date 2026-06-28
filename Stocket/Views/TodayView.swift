@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Translation
 
 struct TodayView: View {
   @Environment(\.modelContext) private var modelContext
@@ -75,6 +76,7 @@ struct TodayView: View {
 
 private struct EventRow: View {
   let event: EventSummary
+  @State private var showTranslation = false
 
   var body: some View {
     VStack(alignment: .leading, spacing: .pt4) {
@@ -90,10 +92,32 @@ private struct EventRow: View {
           .padding(.vertical, .pt2)
           .background(Color.blue.opacity(0.15), in: Capsule())
       }
-      Text(verbatim: event.oneLineSummary)
+      Text(summaryText)
         .font(.body)
+        .environment(\.openURL, OpenURLAction { url in
+          if url.scheme == "stocket-translate" {
+            showTranslation = true
+            return .handled
+          }
+          return .systemAction
+        })
     }
     .padding(.vertical, .pt4)
+    .translationPresentation(isPresented: $showTranslation, text: event.oneLineSummary)
+  }
+
+  private var summaryText: AttributedString {
+    var base = AttributedString(event.oneLineSummary)
+    base.append(AttributedString("  "))
+
+    let translateLabel = String(localized: "event.row.translate")
+    var translateLink = AttributedString(translateLabel)
+    translateLink.link = URL(string: "stocket-translate://translate")
+    translateLink.swiftUI.foregroundColor = .blue
+    translateLink.swiftUI.font = .caption
+
+    base.append(translateLink)
+    return base
   }
 }
 
