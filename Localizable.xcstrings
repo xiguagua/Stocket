@@ -132,6 +132,54 @@
         }
       }
     },
+    "ticker.search.guidance.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search SEC Filings"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索 SEC 公告"
+          }
+        }
+      }
+    },
+    "ticker.search.guidance.description" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a stock symbol or company name to track SEC filings and event analyses."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输入股票代码或公司名称，追踪 SEC 归档文件及公告分析。"
+          }
+        }
+      }
+    },
+    "ticker.search.popular.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Popular Tickers"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "热门股票"
+          }
+        }
+      }
+    },
     "Today" : {
 
     },
