@@ -41,14 +41,16 @@ The `worker/` directory exists and contains the initial server-side slice.
 - Shared scheme `Stocket` is checked in. With `xcodebuild` pass `-scheme Stocket`.
 - Bundle ID `com.flhcc.Stocket`, team `RW8NZD94C3`, app group `group.com.flhcc.Stocket`. Entitlements (`Stocket.entitlements`) enable CloudKit and APNs (development); keep these in sync if you touch capabilities.
 - No SPM dependencies yet. If adding one, use Xcode's package integration (the `packageProductDependencies` section is currently empty).
-- Prefer the installed XcodeBuildMCP CLI skill for agent-driven app builds, runs, tests, simulator logs, screenshots, and UI inspection. Do not start or rely on the MCP server workflow for normal repo work. Keep raw `xcodebuild` for CI, fallback, and exact command-line reproduction.
-- XcodeBuildMCP defaults are persisted in `.xcodebuildmcp/config.yaml` for the app: project `Stocket.xcodeproj`, scheme `Stocket`, configuration `Debug`, simulator `iPhone 17` (`9250ED78-3FC0-4EFE-97BB-5070F3A28AFD`).
-
-Fallback raw build command for CI or exact command-line reproduction:
-
-```bash
-xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 17' build
-```
+- **CRITICAL**: ALWAYS use `xcodebuildmcp` instead of raw `xcodebuild` for local dev. Raw `xcodebuild` is slow and bypasses the daemon cache.
+- **Canonical Commands**:
+  - Build: `xcodebuildmcp simulator build --style minimal`
+  - Run: `xcodebuildmcp simulator build-and-run --style minimal`
+  - Test: `xcodebuildmcp simulator test --style minimal`
+  - Screenshot: `xcodebuildmcp simulator screenshot`
+- **Fallback (CI only)**:
+  ```bash
+  xcodebuild -scheme Stocket -destination 'platform=iOS Simulator,name=iPhone 17' build
+  ```
 
 When using raw `xcodebuild`, pick a simulator name that exists on the machine (`xcrun simctl list devices available`) before running.
 
