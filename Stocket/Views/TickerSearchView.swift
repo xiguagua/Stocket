@@ -12,7 +12,7 @@ struct TickerSearchView: View {
         NavigationStack {
             Group {
                 if query.isEmpty {
-                    VStack(spacing: pt20) {
+                    VStack(spacing: .pt20) {
                         Spacer()
 
                         Image(systemName: "magnifyingglass")
@@ -20,25 +20,25 @@ struct TickerSearchView: View {
                             .foregroundStyle(.secondary)
                             .symbolEffect(.bounce, value: query.isEmpty)
 
-                        VStack(spacing: pt8) {
+                        VStack(spacing: .pt8) {
                             Text("ticker.search.guidance.title")
                                 .font(.headline)
                             Text("ticker.search.guidance.description")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
-                                .padding(.horizontal, pt32)
+                                .padding(.horizontal, .pt32)
                         }
 
-                        VStack(alignment: .leading, spacing: pt12) {
+                        VStack(alignment: .leading, spacing: .pt12) {
                             Text("ticker.search.popular.title")
                                 .font(.caption)
                                 .fontWeight(.bold)
                                 .foregroundStyle(.secondary)
-                                .padding(.horizontal, pt16)
+                                .padding(.horizontal, .pt16)
 
                             ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: pt8) {
+                                HStack(spacing: .pt8) {
                                     ForEach(popularTickers, id: \.self) { ticker in
                                         Button {
                                             query = ticker
@@ -46,16 +46,16 @@ struct TickerSearchView: View {
                                             Text(verbatim: ticker)
                                                 .font(.subheadline)
                                                 .fontWeight(.medium)
-                                                .padding(.horizontal, pt16)
-                                                .padding(.vertical, pt8)
+                                                .padding(.horizontal, .pt16)
+                                                .padding(.vertical, .pt8)
                                                 .background(Color.blue.opacity(0.15), in: Capsule())
                                         }
                                     }
                                 }
-                                .padding(.horizontal, pt16)
+                                .padding(.horizontal, .pt16)
                             }
                         }
-                        .padding(.top, pt20)
+                        .padding(.top, .pt20)
 
                         Spacer()
                     }

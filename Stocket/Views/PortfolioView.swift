@@ -60,8 +60,8 @@ struct PortfolioView: View {
             Spacer()
             if ticker.relation == .position {
                 Text("portfolio.position.badge").font(.caption2)
-                    .padding(.horizontal, pt8)
-                    .padding(.vertical, pt2)
+                    .padding(.horizontal, .pt8)
+                    .padding(.vertical, .pt2)
                     .background(Color.green.opacity(0.2), in: Capsule())
             }
         }
