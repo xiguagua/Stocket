@@ -77,7 +77,7 @@ private struct EventRow: View {
   let event: EventSummary
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 4) {
+    VStack(alignment: .leading, spacing: Theme.Spacing.pt4.rawValue) {
       HStack {
         Text(verbatim: event.ticker)
           .font(.caption)
@@ -86,14 +86,14 @@ private struct EventRow: View {
         Spacer()
         Text(verbatim: event.filingType)
           .font(.caption2)
-          .padding(.horizontal, 6)
-          .padding(.vertical, 2)
+          .padding(.horizontal, Theme.Spacing.pt8.rawValue)
+          .padding(.vertical, Theme.Spacing.pt2.rawValue)
           .background(Color.blue.opacity(0.15), in: Capsule())
       }
       Text(verbatim: event.oneLineSummary)
         .font(.body)
     }
-    .padding(.vertical, 4)
+    .padding(.vertical, Theme.Spacing.pt4.rawValue)
   }
 }
 
