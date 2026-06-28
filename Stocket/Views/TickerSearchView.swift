@@ -12,7 +12,7 @@ struct TickerSearchView: View {
         NavigationStack {
             Group {
                 if query.isEmpty {
-                    VStack(spacing: Theme.Spacing.pt20.rawValue) {
+                    VStack(spacing: pt20) {
                         Spacer()
 
                         Image(systemName: "magnifyingglass")
@@ -20,25 +20,25 @@ struct TickerSearchView: View {
                             .foregroundStyle(.secondary)
                             .symbolEffect(.bounce, value: query.isEmpty)
 
-                        VStack(spacing: Theme.Spacing.pt8.rawValue) {
+                        VStack(spacing: pt8) {
                             Text("ticker.search.guidance.title")
                                 .font(.headline)
                             Text("ticker.search.guidance.description")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
-                                .padding(.horizontal, Theme.Spacing.pt32.rawValue)
+                                .padding(.horizontal, pt32)
                         }
 
-                        VStack(alignment: .leading, spacing: Theme.Spacing.pt12.rawValue) {
+                        VStack(alignment: .leading, spacing: pt12) {
                             Text("ticker.search.popular.title")
                                 .font(.caption)
                                 .fontWeight(.bold)
                                 .foregroundStyle(.secondary)
-                                .padding(.horizontal, Theme.Spacing.pt16.rawValue)
+                                .padding(.horizontal, pt16)
 
                             ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: Theme.Spacing.pt8.rawValue) {
+                                HStack(spacing: pt8) {
                                     ForEach(popularTickers, id: \.self) { ticker in
                                         Button {
                                             query = ticker
@@ -46,16 +46,16 @@ struct TickerSearchView: View {
                                             Text(verbatim: ticker)
                                                 .font(.subheadline)
                                                 .fontWeight(.medium)
-                                                .padding(.horizontal, Theme.Spacing.pt16.rawValue)
-                                                .padding(.vertical, Theme.Spacing.pt8.rawValue)
+                                                .padding(.horizontal, pt16)
+                                                .padding(.vertical, pt8)
                                                 .background(Color.blue.opacity(0.15), in: Capsule())
                                         }
                                     }
                                 }
-                                .padding(.horizontal, Theme.Spacing.pt16.rawValue)
+                                .padding(.horizontal, pt16)
                             }
                         }
-                        .padding(.top, Theme.Spacing.pt20.rawValue)
+                        .padding(.top, pt20)
 
                         Spacer()
                     }

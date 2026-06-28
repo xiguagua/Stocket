@@ -15,3 +15,15 @@ enum Theme {
         var value: CGFloat { rawValue }
     }
 }
+
+// MARK: - Global Spacing Constants
+
+let pt2 = Theme.Spacing.pt2.rawValue
+let pt4 = Theme.Spacing.pt4.rawValue
+let pt8 = Theme.Spacing.pt8.rawValue
+let pt12 = Theme.Spacing.pt12.rawValue
+let pt16 = Theme.Spacing.pt16.rawValue
+let pt20 = Theme.Spacing.pt20.rawValue
+let pt24 = Theme.Spacing.pt24.rawValue
+let pt32 = Theme.Spacing.pt32.rawValue
+let pt48 = Theme.Spacing.pt48.rawValue
