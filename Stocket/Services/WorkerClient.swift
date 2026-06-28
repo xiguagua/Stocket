@@ -1,8 +1,42 @@
 import Foundation
 
-actor WorkerClient {
-    static let shared = WorkerClient()
+// MARK: - Protocol
 
+protocol WorkerClientProtocol: Sendable {
+    func postWatchlist(userId: String, ticker: String, cik: String, relation: String) async throws
+    func fetchEvents(ticker: String, since: Date?) async throws -> [WorkerClient.EventDTO]
+}
+
+// MARK: - Namespace & Dispatcher
+
+enum WorkerClient {
+    static let shared: any WorkerClientProtocol = {
+        #if DEBUG
+        if ProcessInfo.processInfo.environment["USE_MOCK"] != "false" {
+            print("[WorkerClient] Initializing MockWorkerClient")
+            return MockWorkerClient()
+        }
+        #endif
+        print("[WorkerClient] Initializing RealWorkerClient")
+        return RealWorkerClient()
+    }()
+
+    struct EventDTO: Codable {
+        let accession: String
+        let ticker: String
+        let cik: String
+        let filingType: String
+        let filingDate: String
+        let importance: Int
+        let items: [String]
+        let oneLineSummary: String
+        let createdAt: String
+    }
+}
+
+// MARK: - Real Implementation
+
+struct RealWorkerClient: WorkerClientProtocol {
     private let baseURL: URL
     private let session: URLSession
 
@@ -20,18 +54,6 @@ actor WorkerClient {
         let relation: String
     }
 
-    struct EventDTO: Decodable {
-        let accession: String
-        let ticker: String
-        let cik: String
-        let filingType: String
-        let filingDate: String
-        let importance: Int
-        let items: [String]
-        let oneLineSummary: String
-        let createdAt: String
-    }
-
     func postWatchlist(userId: String, ticker: String, cik: String, relation: String) async throws {
         let payload = WatchlistPayload(userId: userId, ticker: ticker, cik: cik, relation: relation)
         var request = URLRequest(url: baseURL.appending(path: "watchlist"))
@@ -41,13 +63,64 @@ actor WorkerClient {
         _ = try await session.data(for: request)
     }
 
-    func fetchEvents(ticker: String, since: Date?) async throws -> [EventDTO] {
+    func fetchEvents(ticker: String, since: Date?) async throws -> [WorkerClient.EventDTO] {
         var url = baseURL.appending(path: "tickers").appending(path: ticker.uppercased()).appending(path: "events")
         if let since {
             let iso = ISO8601DateFormatter().string(from: since)
             url = url.appending(queryItems: [URLQueryItem(name: "since", value: iso)])
         }
         let (data, _) = try await session.data(from: url)
-        return try JSONDecoder().decode([EventDTO].self, from: data)
+        return try JSONDecoder().decode([WorkerClient.EventDTO].self, from: data)
+    }
+}
+
+// MARK: - Mock Implementation
+
+struct MockWorkerClient: WorkerClientProtocol {
+    func postWatchlist(userId: String, ticker: String, cik: String, relation: String) async throws {
+        print("[MockWorkerClient] postWatchlist: \(ticker) (\(cik)) for user \(userId) as \(relation)")
+        try await Task.sleep(for: .milliseconds(150)) // simulate network delay
+    }
+
+    func fetchEvents(ticker: String, since: Date?) async throws -> [WorkerClient.EventDTO] {
+        print("[MockWorkerClient] fetchEvents for ticker: \(ticker) since: \(String(describing: since))")
+        try await Task.sleep(for: .milliseconds(200)) // simulate network delay
+
+        let formatter = ISO8601DateFormatter()
+        let now = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: now) ?? now
+
+        let event1 = WorkerClient.EventDTO(
+            accession: "mock-\(ticker)-8k-\(Int(now.timeIntervalSince1970))",
+            ticker: ticker.uppercased(),
+            cik: "0000000000",
+            filingType: "8-K",
+            filingDate: formatter.string(from: now),
+            importance: 5,
+            items: ["1.01"],
+            oneLineSummary: "Company announced a material merger or acquisition transaction.",
+            createdAt: formatter.string(from: now)
+        )
+
+        let event2 = WorkerClient.EventDTO(
+            accession: "mock-\(ticker)-8k-\(Int(yesterday.timeIntervalSince1970))",
+            ticker: ticker.uppercased(),
+            cik: "0000000000",
+            filingType: "8-K",
+            filingDate: formatter.string(from: yesterday),
+            importance: 3,
+            items: ["2.02"],
+            oneLineSummary: "Company reported quarterly financial results.",
+            createdAt: formatter.string(from: yesterday)
+        )
+
+        var result = [event1, event2]
+        if let since {
+            result = result.filter { dto in
+                guard let date = formatter.date(from: dto.filingDate) else { return false }
+                return date > since
+            }
+        }
+        return result
     }
 }
