@@ -1,7 +1,13 @@
+import os
 import sqlite3
 from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent.parent / "data" / "worker.db"
+DB_PATH = Path(
+    os.environ.get(
+        "WORKER_DB_PATH",
+        Path(__file__).resolve().parent.parent / "data" / "worker.db",
+    )
+).expanduser()
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS user_tickers (

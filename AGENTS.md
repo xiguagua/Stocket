@@ -75,6 +75,12 @@ swift test --package-path STLibrary
 # Install deps
 uv pip install -e './worker[dev]'
 
+# Run local API
+uv run --project worker uvicorn src.main:app --reload --port 8787 --app-dir worker
+
+# Run cron once
+uv run --project worker python -m src.cron
+
 # Run tests
 uv run --project worker --extra dev pytest
 

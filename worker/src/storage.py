@@ -1,8 +1,14 @@
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-STORAGE_ROOT = Path(__file__).resolve().parent.parent / "data" / "summaries"
+STORAGE_ROOT = Path(
+    os.environ.get(
+        "STORAGE_ROOT",
+        Path(__file__).resolve().parent.parent / "data" / "summaries",
+    )
+).expanduser()
 
 
 def _event_path(ticker: str, accession: str) -> Path:

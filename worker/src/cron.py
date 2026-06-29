@@ -6,3 +6,11 @@ def run_cron():
     processed = edgar_ingest.run_ingestion()
     print(f"Cron complete. Processed {processed} filings.")
     return processed
+
+
+def main():
+    run_cron()
+
+
+if __name__ == "__main__":
+    main()
