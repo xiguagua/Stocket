@@ -11,7 +11,7 @@ protocol WorkerClientProtocol: Sendable {
 // MARK: - Namespace & Dispatcher
 
 enum WorkerClient {
-    private static let logger = AppLog.logger(category: "WorkerClient")
+    private static let logger = AppLog.logger(category: .workerClient)
 
     static let shared: any WorkerClientProtocol = {
         #if DEBUG
@@ -80,7 +80,7 @@ struct RealWorkerClient: WorkerClientProtocol {
 // MARK: - Mock Implementation
 
 struct MockWorkerClient: WorkerClientProtocol {
-    private static let logger = AppLog.logger(category: "MockWorkerClient")
+    private static let logger = AppLog.logger(category: .mockWorkerClient)
 
     func postWatchlist(userId: String, ticker: String, cik: String, relation: String) async throws {
         Self.logger.debug("postWatchlist ticker: \(ticker, privacy: .public), cik: \(cik, privacy: .private), user: \(userId, privacy: .private), relation: \(relation, privacy: .public)")
