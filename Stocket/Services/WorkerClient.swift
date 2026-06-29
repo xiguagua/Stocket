@@ -15,7 +15,7 @@ enum WorkerClient {
 
     static let shared: any WorkerClientProtocol = {
         #if DEBUG
-        if ProcessInfo.processInfo.environment["USE_MOCK"] != "false" {
+        if ProcessInfo.processInfo.environment["USE_MOCK"] == "true" {
             logger.debug("Initializing MockWorkerClient")
             return MockWorkerClient()
         }
