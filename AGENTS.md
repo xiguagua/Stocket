@@ -73,21 +73,21 @@ swift test --package-path STLibrary
 
 ```bash
 # Install deps
-uv pip install -e worker/
+uv pip install -e './worker[dev]'
 
 # Run tests
-pytest worker/tests/
+uv run --project worker --extra dev pytest
 
 # Run smoke test
-python worker/smoke.py
+uv run --project worker python worker/smoke.py
 ```
 
 ## Tests
 
 - **Swift library tests** (`STLibrary/Tests/`) use Swift Testing: `import Testing`, `struct`-based suites, `@Test func`, `#expect`. Do not add XCTest-style classes here.
 - **App UI tests** are intentionally absent. Do not add app-hosted UI/unit test targets unless explicitly requested; prefer moving pure logic into `STLibrary` and testing it with `swift test`.
-- **Worker tests** (`worker/tests/`) use `pytest`. Pure-function unit tests only (XBRL parser, schema validator, gap detection, payload constructor, accession dedup). See ADR-0002 and Q33-B.
-- **Smoke test** (`worker/smoke.py`) — end-to-end pipeline on a known historical filing. Run before deploying worker changes.
+- **Worker tests** (`worker/tests/`) use `pytest`. Keep tests isolated from `worker/data` by using temporary SQLite and summary storage paths.
+- **Smoke test** (`worker/smoke.py`) — local end-to-end tracer for `/watchlist` → cron → Event storage → `/tickers/{ticker}/events`. It forces mock ingestion by clearing `EDGAR_IDENTITY` and uses temporary storage, so it should not depend on live EDGAR, LLM credentials, or local `worker/data`.
 
 ## Git
 
