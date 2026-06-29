@@ -81,6 +81,9 @@ uv run --project worker uvicorn src.main:app --reload --port 8787 --app-dir work
 # Run cron once
 uv run --project worker python -m src.cron
 
+# Run cron against live EDGAR instead of mock ingestion
+EDGAR_IDENTITY='Name email@example.com' uv run --project worker python -m src.cron
+
 # Run tests
 uv run --project worker --extra dev pytest
 
@@ -94,6 +97,7 @@ uv run --project worker python worker/smoke.py
 - **App UI tests** are intentionally absent. Do not add app-hosted UI/unit test targets unless explicitly requested; prefer moving pure logic into `STLibrary` and testing it with `swift test`.
 - **Worker tests** (`worker/tests/`) use `pytest`. Keep tests isolated from `worker/data` by using temporary SQLite and summary storage paths.
 - **Smoke test** (`worker/smoke.py`) — local end-to-end tracer for `/watchlist` → cron → Event storage → `/tickers/{ticker}/events`. It forces mock ingestion by clearing `EDGAR_IDENTITY` and uses temporary storage, so it should not depend on live EDGAR, LLM credentials, or local `worker/data`.
+- **EDGAR ingestion** scans recent 8-K filings for Watchlist CIKs. `EDGAR_LOOKBACK_DAYS` defaults to `7`; Accession Number dedupe is performed against stored Events, and each cron run records `run_log` status in SQLite.
 
 ## Git
 

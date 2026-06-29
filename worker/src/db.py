@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 DB_PATH = Path(
@@ -65,3 +66,35 @@ def upsert_user_ticker(
     )
     conn.commit()
     conn.close()
+
+
+def record_run(
+    status: str,
+    processed_count: int,
+    error: str | None = None,
+    run_date: date | None = None,
+) -> None:
+    run_date = run_date or datetime.now(timezone.utc).date()
+    conn = get_connection()
+    conn.execute(
+        """
+        INSERT INTO run_log (date, status, processed_count, error)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT (date)
+        DO UPDATE SET status=excluded.status,
+                      processed_count=excluded.processed_count,
+                      error=excluded.error
+        """,
+        (run_date.isoformat(), status, processed_count, error),
+    )
+    conn.commit()
+    conn.close()
+
+
+def get_latest_run_log() -> dict | None:
+    conn = get_connection()
+    row = conn.execute(
+        "SELECT date, status, processed_count, error FROM run_log ORDER BY date DESC LIMIT 1"
+    ).fetchone()
+    conn.close()
+    return dict(row) if row else None
