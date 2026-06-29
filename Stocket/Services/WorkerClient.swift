@@ -1,4 +1,5 @@
 import Foundation
+import OSLog
 
 // MARK: - Protocol
 
@@ -10,14 +11,16 @@ protocol WorkerClientProtocol: Sendable {
 // MARK: - Namespace & Dispatcher
 
 enum WorkerClient {
+    private static let logger = AppLog.logger(category: "WorkerClient")
+
     static let shared: any WorkerClientProtocol = {
         #if DEBUG
         if ProcessInfo.processInfo.environment["USE_MOCK"] != "false" {
-            print("[WorkerClient] Initializing MockWorkerClient")
+            logger.debug("Initializing MockWorkerClient")
             return MockWorkerClient()
         }
         #endif
-        print("[WorkerClient] Initializing RealWorkerClient")
+        logger.debug("Initializing RealWorkerClient")
         return RealWorkerClient()
     }()
 
@@ -77,13 +80,15 @@ struct RealWorkerClient: WorkerClientProtocol {
 // MARK: - Mock Implementation
 
 struct MockWorkerClient: WorkerClientProtocol {
+    private static let logger = AppLog.logger(category: "MockWorkerClient")
+
     func postWatchlist(userId: String, ticker: String, cik: String, relation: String) async throws {
-        print("[MockWorkerClient] postWatchlist: \(ticker) (\(cik)) for user \(userId) as \(relation)")
+        Self.logger.debug("postWatchlist ticker: \(ticker, privacy: .public), cik: \(cik, privacy: .private), user: \(userId, privacy: .private), relation: \(relation, privacy: .public)")
         try await Task.sleep(for: .milliseconds(150)) // simulate network delay
     }
 
     func fetchEvents(ticker: String, since: Date?) async throws -> [WorkerClient.EventDTO] {
-        print("[MockWorkerClient] fetchEvents for ticker: \(ticker) since: \(String(describing: since))")
+        Self.logger.debug("fetchEvents ticker: \(ticker, privacy: .public), since: \(String(describing: since), privacy: .public)")
         try await Task.sleep(for: .milliseconds(200)) // simulate network delay
 
         let formatter = ISO8601DateFormatter()
