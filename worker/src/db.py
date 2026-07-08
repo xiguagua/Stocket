@@ -51,6 +51,13 @@ def get_watchlist_ciks() -> list[str]:
     return [r["cik"] for r in rows]
 
 
+def get_watchlist_tickers() -> list[str]:
+    conn = get_connection()
+    rows = conn.execute("SELECT DISTINCT ticker FROM user_tickers ORDER BY ticker").fetchall()
+    conn.close()
+    return [r["ticker"] for r in rows]
+
+
 def upsert_user_ticker(
     user_id: str, ticker: str, cik: str, relation: str, updated_at: str
 ) -> None:
