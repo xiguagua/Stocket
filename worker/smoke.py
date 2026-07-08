@@ -15,6 +15,7 @@ def main() -> int:
     os.environ.pop("EDGAR_IDENTITY", None)
     os.environ["LLM_PROVIDER"] = "mock"
     os.environ["STORAGE_BACKEND"] = "local"
+    os.environ["APNS_SEND_DIGEST"] = "false"
 
     with TemporaryDirectory() as temp_dir:
         root = Path(temp_dir)
