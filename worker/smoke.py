@@ -14,6 +14,7 @@ def main() -> int:
     # Keep local smoke deterministic: no EDGAR credentials required.
     os.environ.pop("EDGAR_IDENTITY", None)
     os.environ["LLM_PROVIDER"] = "mock"
+    os.environ["STORAGE_BACKEND"] = "local"
 
     with TemporaryDirectory() as temp_dir:
         root = Path(temp_dir)

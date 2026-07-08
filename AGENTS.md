@@ -102,6 +102,7 @@ uv run --project worker python worker/smoke.py
 - **Smoke test** (`worker/smoke.py`) — local end-to-end tracer for `/watchlist` → cron → Event storage → `/tickers/{ticker}/events`. It forces mock ingestion by clearing `EDGAR_IDENTITY` and uses temporary storage, so it should not depend on live EDGAR, LLM credentials, or local `worker/data`.
 - **EDGAR ingestion** scans recent 8-K filings for Watchlist CIKs. `EDGAR_LOOKBACK_DAYS` defaults to `7`; Accession Number dedupe is performed against stored Events, and each cron run records `run_log` status in SQLite.
 - **LLM first-stage** is selected with `LLM_PROVIDER` (`mock`, `openai`, or `anthropic`). Keep `mock` as the default for tests and local smoke; real providers must return JSON with `importance`, `items`, and `oneLineSummary`.
+- **Shared Event storage** is selected with `STORAGE_BACKEND` (`local` or `r2`). Keep `local` as the default for tests and smoke. R2 uses S3-compatible `boto3` with `R2_BUCKET`, `R2_ENDPOINT_URL`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, optional `R2_REGION`, and optional `R2_KEY_PREFIX`.
 
 ## Git
 
