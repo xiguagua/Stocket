@@ -84,6 +84,9 @@ uv run --project worker python -m src.cron
 # Run cron against live EDGAR instead of mock ingestion
 EDGAR_IDENTITY='Name email@example.com' uv run --project worker python -m src.cron
 
+# Run cron with live EDGAR and a real first-stage LLM provider
+EDGAR_IDENTITY='Name email@example.com' LLM_PROVIDER=openai OPENAI_API_KEY='...' uv run --project worker python -m src.cron
+
 # Run tests
 uv run --project worker --extra dev pytest
 
@@ -98,6 +101,7 @@ uv run --project worker python worker/smoke.py
 - **Worker tests** (`worker/tests/`) use `pytest`. Keep tests isolated from `worker/data` by using temporary SQLite and summary storage paths.
 - **Smoke test** (`worker/smoke.py`) — local end-to-end tracer for `/watchlist` → cron → Event storage → `/tickers/{ticker}/events`. It forces mock ingestion by clearing `EDGAR_IDENTITY` and uses temporary storage, so it should not depend on live EDGAR, LLM credentials, or local `worker/data`.
 - **EDGAR ingestion** scans recent 8-K filings for Watchlist CIKs. `EDGAR_LOOKBACK_DAYS` defaults to `7`; Accession Number dedupe is performed against stored Events, and each cron run records `run_log` status in SQLite.
+- **LLM first-stage** is selected with `LLM_PROVIDER` (`mock`, `openai`, or `anthropic`). Keep `mock` as the default for tests and local smoke; real providers must return JSON with `importance`, `items`, and `oneLineSummary`.
 
 ## Git
 

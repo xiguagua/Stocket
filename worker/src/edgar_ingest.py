@@ -55,7 +55,7 @@ def run_ingestion(company_factory=None, set_identity_func=None, today: date | No
 
                 text = filing.text()[:5000] if hasattr(filing, "text") else ""
 
-                result = llm.mock_first_stage(
+                result = llm.first_stage(
                     filing_text=text,
                     accession=accession,
                     ticker=ticker,
@@ -130,7 +130,7 @@ def _mock_ingestion(ciks: list[str]) -> int:
         if existing:
             continue
 
-        result = llm.mock_first_stage(
+        result = llm.first_stage(
             filing_text="company filed a current report",
             accession=accession,
             ticker=ticker,
