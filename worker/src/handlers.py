@@ -12,6 +12,11 @@ class WatchlistPayload(BaseModel):
     relation: str = "watching"
 
 
+class DevicePayload(BaseModel):
+    userId: str
+    deviceToken: str
+
+
 def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -25,6 +30,15 @@ async def upsert_watchlist(payload: WatchlistPayload) -> dict:
         updated_at=_now_iso(),
     )
     return {"status": "ok", "ticker": payload.ticker}
+
+
+async def upsert_device(payload: DevicePayload) -> dict:
+    db.upsert_device(
+        user_id=payload.userId,
+        device_token=payload.deviceToken,
+        updated_at=_now_iso(),
+    )
+    return {"status": "ok"}
 
 
 async def get_ticker_events(ticker: str, since: str | None) -> list[dict]:

@@ -99,6 +99,7 @@ uv run --project worker python worker/smoke.py
 - **Swift library tests** (`STLibrary/Tests/`) use Swift Testing: `import Testing`, `struct`-based suites, `@Test func`, `#expect`. Do not add XCTest-style classes here.
 - **App UI tests** are intentionally absent. Do not add app-hosted UI/unit test targets unless explicitly requested; prefer moving pure logic into `STLibrary` and testing it with `swift test`.
 - **Worker tests** (`worker/tests/`) use `pytest`. Keep tests isolated from `worker/data` by using temporary SQLite and summary storage paths.
+- **Worker user-data endpoints** are `/watchlist` for Watchlist CIK replication and `/devices` for APNs device-token replication. Both upsert into SQLite and treat CloudKit/app state as the source of truth.
 - **Smoke test** (`worker/smoke.py`) — local end-to-end tracer for `/watchlist` → cron → Event storage → `/tickers/{ticker}/events`. It forces mock ingestion by clearing `EDGAR_IDENTITY` and uses temporary storage, so it should not depend on live EDGAR, LLM credentials, or local `worker/data`.
 - **EDGAR ingestion** scans recent 8-K filings for Watchlist CIKs. `EDGAR_LOOKBACK_DAYS` defaults to `7`; Accession Number dedupe is performed against stored Events, and each cron run records `run_log` status in SQLite.
 - **LLM first-stage** is selected with `LLM_PROVIDER` (`mock`, `openai`, or `anthropic`). Keep `mock` as the default for tests and local smoke; real providers must return JSON with `importance`, `items`, and `oneLineSummary`.

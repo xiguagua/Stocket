@@ -68,6 +68,36 @@ def upsert_user_ticker(
     conn.close()
 
 
+def upsert_device(user_id: str, device_token: str, updated_at: str) -> None:
+    conn = get_connection()
+    conn.execute(
+        """
+        INSERT INTO devices (user_id, device_token, updated_at)
+        VALUES (?, ?, ?)
+        ON CONFLICT (user_id, device_token)
+        DO UPDATE SET updated_at=excluded.updated_at
+        """,
+        (user_id, device_token, updated_at),
+    )
+    conn.commit()
+    conn.close()
+
+
+def get_devices(user_id: str | None = None) -> list[dict]:
+    conn = get_connection()
+    if user_id:
+        rows = conn.execute(
+            "SELECT user_id, device_token, updated_at FROM devices WHERE user_id = ? ORDER BY device_token",
+            (user_id,),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT user_id, device_token, updated_at FROM devices ORDER BY user_id, device_token"
+        ).fetchall()
+    conn.close()
+    return [dict(row) for row in rows]
+
+
 def record_run(
     status: str,
     processed_count: int,
