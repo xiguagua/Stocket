@@ -1,0 +1,12 @@
+[Unit]
+Description=Stocket Worker EDGAR ingestion cron
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=stocket
+Group=stocket
+WorkingDirectory=/opt/stocket
+EnvironmentFile=/etc/stocket/worker.env
+ExecStart=/usr/bin/env uv run --project worker python -m src.cron

@@ -70,6 +70,7 @@ swift test --package-path STLibrary
 - Dependencies managed via `pyproject.toml` + `uv` (or `pip`). Key libraries: `edgartools` (EDGAR XBRL/filing parsing), `boto3` (R2 S3-compatible API), `anthropic` or `openai` (LLM, configurable per ADR-0005), `httpx` (APNs), `fastapi` + `uvicorn`.
 - SQLite for `devices`, `user_tickers` (read-replica), `run_log`, processed-filing state.
 - No long-running server except the lightweight FastAPI process (systemd-managed).
+- Worker deployment docs and systemd templates live in `worker/DEPLOY.md` and `worker/deploy/`.
 
 ```bash
 # Install deps

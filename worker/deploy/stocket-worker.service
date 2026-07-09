@@ -1,0 +1,17 @@
+[Unit]
+Description=Stocket Worker FastAPI service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=stocket
+Group=stocket
+WorkingDirectory=/opt/stocket
+EnvironmentFile=/etc/stocket/worker.env
+ExecStart=/usr/bin/env uv run --project worker uvicorn src.main:app --host 127.0.0.1 --port 8787 --app-dir worker
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
