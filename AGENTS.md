@@ -88,6 +88,9 @@ EDGAR_IDENTITY='Name email@example.com' uv run --project worker python -m src.cr
 # Run cron with live EDGAR and a real first-stage LLM provider
 EDGAR_IDENTITY='Name email@example.com' LLM_PROVIDER=openai OPENAI_API_KEY='...' uv run --project worker python -m src.cron
 
+# Validate worker configuration before deployment
+uv run --project worker python -m src.preflight
+
 # Run tests
 uv run --project worker --extra dev pytest
 
@@ -107,6 +110,7 @@ uv run --project worker python worker/smoke.py
 - **Shared Event storage** is selected with `STORAGE_BACKEND` (`local` or `r2`). Keep `local` as the default for tests and smoke. R2 uses S3-compatible `boto3` with `R2_BUCKET`, `R2_ENDPOINT_URL`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, optional `R2_REGION`, and optional `R2_KEY_PREFIX`.
 - **APNs Digest push** uses `worker/src/apns.py`. Configure `APNS_SEND_DIGEST=true`, `APNS_ENV`, `APNS_TOPIC`, `APNS_TEAM_ID`, `APNS_KEY_ID`, and either `APNS_PRIVATE_KEY` or `APNS_PRIVATE_KEY_PATH`. Keep APNs sending injectable in tests; do not hit Apple's API from pytest.
 - **Digest event count** uses `worker/src/digest.py` to count unique Accession Numbers for Events created today across Watchlist Tickers. Keep this global for MVP; app-side filtering/personalization can refine the Digest content when opened.
+- **Preflight** (`worker/src/preflight.py`) validates worker configuration without contacting external services. The deployment systemd templates run it before starting FastAPI or cron.
 
 ## Git
 

@@ -9,4 +9,5 @@ User=stocket
 Group=stocket
 WorkingDirectory=/opt/stocket
 EnvironmentFile=/etc/stocket/worker.env
+ExecStartPre=/usr/bin/env uv run --project worker python -m src.preflight
 ExecStart=/usr/bin/env uv run --project worker python -m src.cron

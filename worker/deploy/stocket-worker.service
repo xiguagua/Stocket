@@ -9,6 +9,7 @@ User=stocket
 Group=stocket
 WorkingDirectory=/opt/stocket
 EnvironmentFile=/etc/stocket/worker.env
+ExecStartPre=/usr/bin/env uv run --project worker python -m src.preflight
 ExecStart=/usr/bin/env uv run --project worker uvicorn src.main:app --host 127.0.0.1 --port 8787 --app-dir worker
 Restart=on-failure
 RestartSec=5

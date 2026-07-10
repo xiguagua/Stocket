@@ -94,6 +94,18 @@ sudo chown stocket:stocket /var/lib/stocket
 
 Use `APNS_SEND_DIGEST=false` until device registration and APNs credentials are verified.
 
+## Preflight
+
+Run the configuration check before starting systemd units:
+
+```bash
+uv run --project worker python -m src.preflight
+```
+
+It validates the configured EDGAR lookback, real LLM credentials, R2 requirements, optional APNs requirements, and SQLite parent directory. It does not contact EDGAR, an LLM provider, R2, or APNs.
+
+Both systemd services run this command through `ExecStartPre`, so invalid production configuration prevents the API or cron from starting.
+
 ## systemd Units
 
 Templates live in `worker/deploy/`:
