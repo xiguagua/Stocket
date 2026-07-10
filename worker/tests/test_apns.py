@@ -66,6 +66,30 @@ def test_send_digest_posts_payload_to_registered_devices(monkeypatch):
     assert client.requests[0]["json"]["eventCount"] == 3
 
 
+def test_send_digest_continues_after_transport_failure(monkeypatch):
+    client = FakeAPNsClient(exceptions=[httpx.ConnectTimeout("timed out")])
+    monkeypatch.setattr(apns, "_apns_jwt", lambda: "jwt-token")
+    monkeypatch.setenv("APNS_TOPIC", "com.flhcc.Stocket")
+    db.upsert_device(
+        user_id="local-user",
+        device_token="token-1",
+        updated_at=datetime.now(timezone.utc).isoformat(),
+    )
+    db.upsert_device(
+        user_id="local-user",
+        device_token="token-2",
+        updated_at=datetime.now(timezone.utc).isoformat(),
+    )
+
+    result = apns.send_digest(event_count=3, client=client)
+
+    assert result == {"attempted": 2, "sent": 1, "failed": 1}
+    assert [request["url"] for request in client.requests] == [
+        "https://api.sandbox.push.apple.com/3/device/token-1",
+        "https://api.sandbox.push.apple.com/3/device/token-2",
+    ]
+
+
 def test_apns_url_uses_production_host(monkeypatch):
     monkeypatch.setenv("APNS_ENV", "production")
 
@@ -73,13 +97,17 @@ def test_apns_url_uses_production_host(monkeypatch):
 
 
 class FakeAPNsClient:
-    def __init__(self, status_codes=None):
+    def __init__(self, status_codes=None, exceptions=None):
         self.status_codes = status_codes or []
+        self.exceptions = exceptions or []
         self.requests = []
 
     def post(self, url, headers, json):
         self.requests.append({"url": url, "headers": headers, "json": json})
-        status_code = self.status_codes[len(self.requests) - 1] if len(self.requests) <= len(self.status_codes) else 200
+        request_index = len(self.requests) - 1
+        if request_index < len(self.exceptions) and self.exceptions[request_index]:
+            raise self.exceptions[request_index]
+        status_code = self.status_codes[request_index] if request_index < len(self.status_codes) else 200
         return httpx.Response(status_code=status_code)
 
     def close(self):

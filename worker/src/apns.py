@@ -55,11 +55,15 @@ def send_payload_to_devices(
     try:
         for device_token in device_tokens:
             attempted += 1
-            response = client.post(
-                _apns_url(device_token),
-                headers=_apns_headers(),
-                json=payload,
-            )
+            try:
+                response = client.post(
+                    _apns_url(device_token),
+                    headers=_apns_headers(),
+                    json=payload,
+                )
+            except httpx.HTTPError:
+                failed += 1
+                continue
             if 200 <= response.status_code < 300:
                 sent += 1
             else:
