@@ -8,6 +8,8 @@ def validate() -> list[str]:
     provider = os.environ.get("LLM_PROVIDER", "mock").lower()
     backend = os.environ.get("STORAGE_BACKEND", "local").lower()
     _validate_edgar(errors, requires_live=provider != "mock" or backend != "local")
+    if provider != "mock" or backend != "local":
+        _require("WORKER_API_TOKEN", errors)
     _validate_llm(errors)
     _validate_storage(errors)
     _validate_apns(errors)

@@ -62,3 +62,21 @@ def test_post_devices_endpoint_upserts_device_token():
     assert devices[0]["user_id"] == "local-user"
     assert devices[0]["device_token"] == "apns-token-1"
     assert devices[0]["updated_at"]
+
+
+def test_write_endpoints_require_configured_api_token(monkeypatch):
+    client = TestClient(app)
+    monkeypatch.setenv("WORKER_API_TOKEN", "private-beta-token")
+    payload = {"userId": "local-user", "ticker": "AAPL", "cik": "0000320193"}
+
+    missing = client.post("/watchlist", json=payload)
+    invalid = client.post("/watchlist", json=payload, headers={"Authorization": "Bearer invalid"})
+    authorized = client.post(
+        "/watchlist",
+        json=payload,
+        headers={"Authorization": "Bearer private-beta-token"},
+    )
+
+    assert missing.status_code == 401
+    assert invalid.status_code == 401
+    assert authorized.status_code == 200

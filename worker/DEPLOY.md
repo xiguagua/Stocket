@@ -83,6 +83,7 @@ APNS_KEY_ID=...
 APNS_PRIVATE_KEY_PATH=/etc/stocket/AuthKey_KEYID.p8
 
 WORKER_DB_PATH=/var/lib/stocket/worker.db
+WORKER_API_TOKEN=generate-a-long-random-value
 ```
 
 Create writable state directories:
@@ -93,6 +94,17 @@ sudo chown stocket:stocket /var/lib/stocket
 ```
 
 Use `APNS_SEND_DIGEST=false` until device registration and APNs credentials are verified.
+
+`WORKER_API_TOKEN` protects the write-only `/watchlist` and `/devices` endpoints during private beta. Generate it with `openssl rand -hex 32`. Configure the same value as the `WORKER_API_TOKEN` launch environment variable in the private-beta iOS scheme. This is not user authentication and must be replaced before public release.
+
+For a Tunnel hostname, the private-beta iOS scheme also needs:
+
+```text
+WORKER_SCHEME=https
+WORKER_HOST=worker.example.com
+WORKER_PORT=443
+WORKER_API_TOKEN=<same value as worker.env>
+```
 
 ## Preflight
 

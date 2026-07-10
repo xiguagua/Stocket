@@ -40,41 +40,56 @@ enum WorkerClient {
 // MARK: - Real Implementation
 
 struct RealWorkerClient: WorkerClientProtocol {
-    private let baseURL: URL
-    private let session: URLSession
+  private let baseURL: URL
+  private let session: URLSession
+  private let apiToken: String?
 
-    init() {
-        let host = ProcessInfo.processInfo.environment["WORKER_HOST"] ?? "localhost"
-        let port = ProcessInfo.processInfo.environment["WORKER_PORT"] ?? "8787"
-        self.baseURL = URL(string: "http://\(host):\(port)")!
-        self.session = URLSession(configuration: .ephemeral)
-    }
+  init() {
+    let host = ProcessInfo.processInfo.environment["WORKER_HOST"] ?? "localhost"
+    let port = ProcessInfo.processInfo.environment["WORKER_PORT"] ?? "8787"
+    let scheme = ProcessInfo.processInfo.environment["WORKER_SCHEME"] ?? "http"
+    self.baseURL = URL(string: "\(scheme)://\(host):\(port)")!
+    self.session = URLSession(configuration: .ephemeral)
+    self.apiToken = ProcessInfo.processInfo.environment["WORKER_API_TOKEN"]
+  }
 
-    struct WatchlistPayload: Encodable {
-        let userId: String
-        let ticker: String
-        let cik: String
-        let relation: String
-    }
+  struct WatchlistPayload: Encodable {
+    let userId: String
+    let ticker: String
+    let cik: String
+    let relation: String
+  }
 
-    func postWatchlist(userId: String, ticker: String, cik: String, relation: String) async throws {
-        let payload = WatchlistPayload(userId: userId, ticker: ticker, cik: cik, relation: relation)
-        var request = URLRequest(url: baseURL.appending(path: "watchlist"))
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try JSONEncoder().encode(payload)
-        _ = try await session.data(for: request)
+  func postWatchlist(userId: String, ticker: String, cik: String, relation: String) async throws {
+    let payload = WatchlistPayload(userId: userId, ticker: ticker, cik: cik, relation: relation)
+    var request = URLRequest(url: baseURL.appending(path: "watchlist"))
+    request.httpMethod = "POST"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    if let apiToken {
+      request.setValue("Bearer \(apiToken)", forHTTPHeaderField: "Authorization")
     }
+    request.httpBody = try JSONEncoder().encode(payload)
+    let (_, response) = try await session.data(for: request)
+    try validate(response)
+  }
 
-    func fetchEvents(ticker: String, since: Date?) async throws -> [WorkerClient.EventDTO] {
-        var url = baseURL.appending(path: "tickers").appending(path: ticker.uppercased()).appending(path: "events")
-        if let since {
-            let iso = ISO8601DateFormatter().string(from: since)
-            url = url.appending(queryItems: [URLQueryItem(name: "since", value: iso)])
-        }
-        let (data, _) = try await session.data(from: url)
-        return try JSONDecoder().decode([WorkerClient.EventDTO].self, from: data)
+  func fetchEvents(ticker: String, since: Date?) async throws -> [WorkerClient.EventDTO] {
+    var url = baseURL.appending(path: "tickers").appending(path: ticker.uppercased()).appending(path: "events")
+    if let since {
+      let iso = ISO8601DateFormatter().string(from: since)
+      url = url.appending(queryItems: [URLQueryItem(name: "since", value: iso)])
     }
+    let (data, response) = try await session.data(from: url)
+    try validate(response)
+    return try JSONDecoder().decode([WorkerClient.EventDTO].self, from: data)
+  }
+
+  private func validate(_ response: URLResponse) throws {
+    guard let response = response as? HTTPURLResponse,
+          (200..<300).contains(response.statusCode) else {
+      throw URLError(.badServerResponse)
+    }
+  }
 }
 
 // MARK: - Mock Implementation

@@ -18,6 +18,7 @@ def test_preflight_requires_provider_credentials(monkeypatch):
 
     assert "OPENAI_API_KEY is required" in errors
     assert "EDGAR_IDENTITY is required" in errors
+    assert "WORKER_API_TOKEN is required" in errors
 
 
 def test_preflight_requires_r2_configuration(monkeypatch):
@@ -69,5 +70,6 @@ def clear_optional_env(monkeypatch):
         "APNS_KEY_ID",
         "APNS_PRIVATE_KEY",
         "APNS_PRIVATE_KEY_PATH",
+        "WORKER_API_TOKEN",
     ):
         monkeypatch.delenv(name, raising=False)

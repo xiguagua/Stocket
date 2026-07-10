@@ -1,4 +1,7 @@
-from fastapi import FastAPI, Query
+import hmac
+import os
+
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, status
 
 from .handlers import (
     DevicePayload,
@@ -11,13 +14,23 @@ from .handlers import (
 app = FastAPI(title="Stocket Worker")
 
 
+def require_write_token(authorization: str | None = Header(default=None)) -> None:
+    expected_token = os.environ.get("WORKER_API_TOKEN")
+    if not expected_token:
+        return
+
+    provided_token = authorization.removeprefix("Bearer ") if authorization else ""
+    if not hmac.compare_digest(provided_token, expected_token):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid API token")
+
+
 @app.post("/watchlist")
-async def post_watchlist(payload: WatchlistPayload):
+async def post_watchlist(payload: WatchlistPayload, _: None = Depends(require_write_token)):
     return await upsert_watchlist(payload)
 
 
 @app.post("/devices")
-async def post_device(payload: DevicePayload):
+async def post_device(payload: DevicePayload, _: None = Depends(require_write_token)):
     return await upsert_device(payload)
 
 
